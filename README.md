@@ -10,7 +10,8 @@
 - npx expo install prop-types
 - npx expo install expo-status-bar
 - npx expo install babel-preset-expo
-- npx expo install install prop-types
+- npx expo install prop-types
+- npx expo install expo-linear-gradient
 
 ### 파일 만들기 
 - rafce : React Arrow Function Component Export (방식 사용)
