@@ -1,9 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import PropTypes from "prop-types";
+import Colors from "../../constants/colors";
 
-const PrimaryButton = ({ children, onPress }) => {    
-    
-
+const PrimaryButton = ({ children, onPress }) => {
     return (
         <View style={styles.buttonOuterContainer}>
             <Pressable
@@ -13,7 +12,7 @@ const PrimaryButton = ({ children, onPress }) => {
                         ? [styles.buttonInnerContainer, styles.pressed]
                         : styles.buttonInnerContainer
                 }
-                android_ripple={{ color: '#640233' }}
+                android_ripple={{ color: Colors.primary600 }} // 안드로이드에서 눌렀을 때의 물결 효과 색상
             >
                 <Text style={styles.buttonText}>{children}</Text>
             </Pressable>
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
         overflow: "hidden", // 자식 요소가 둥근 모서리를 넘지 않도록 잘라냄 (모서리 라운드 유지)
     },
     buttonInnerContainer: {
-        backgroundColor: "#72063c", // 버튼 내부 배경색
+        backgroundColor: Colors.primary500, // 버튼 내부 배경색
         paddingVertical: 8, // 세로 방향(위/아래) 패딩
         paddingHorizontal: 16, // 가로 방향(좌/우) 패딩
         elevation: 2, // Android에서 그림자/떠있는 효과를 주기 위한 높이

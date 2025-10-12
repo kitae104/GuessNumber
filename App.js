@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import GameScreen from "./screens/GameScreen";
 import StartGameScreen from "./screens/StartGameScreen";
+import Colors from "./constants/colors";
 
 export default function App() {
     const [userNumber, setUserNumber] = useState();
@@ -21,7 +22,7 @@ export default function App() {
 
     return (
         <LinearGradient
-            colors={["#4e0329", "#ddb52f"]}
+            colors={[Colors.primary700, Colors.accent500]}
             style={styles.rootScreen}
         >
             <Toast />
