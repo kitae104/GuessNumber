@@ -1,11 +1,42 @@
 import { StyleSheet, TextInput, View } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
+import { useState } from "react";
+import Toast from "react-native-toast-message";
+import PropTypes from "prop-types";
 
-const StartGameScreen = () => {
+const StartGameScreen = ({ onPickNumber }) => {
+
+    const [enteredNumber, setEnteredNumber] = useState('');
+
+    const numberInputHandler = (enteredText) => {
+        setEnteredNumber(enteredText);
+    }
+
+    const confirmInputHandler = () => {
+        const chosenNumber = parseInt(enteredNumber);   // 문자열을 정수로 변환
+        if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+            Toast.show({ 
+                type: 'error', 
+                text1: '유효하지 않은 숫자', 
+                text2: '1에서 99 사이의 숫자를 입력해주세요.' 
+            });
+            resetInputHandler(); // 입력 필드 초기화
+            return;
+        }
+        onPickNumber(chosenNumber); // 유효한 숫자면 부모 컴포넌트로 전달
+    }
+
+    const resetInputHandler = () => {
+        setEnteredNumber(''); // 입력 필드를 초기화
+    }
+
     return (
         <View style={styles.inputContainer}>
             <TextInput
                 style={styles.numberInput}
+                value={enteredNumber}
+                onChangeText={numberInputHandler}
+            
                 maxLength={2}
                 keyboardType="number-pad"
                 autoCapitalize="none"
@@ -13,10 +44,10 @@ const StartGameScreen = () => {
             />
             <View style={styles.buttonsContainer}>
                 <View style={styles.buttonContainer}>
-                    <PrimaryButton>시작하기</PrimaryButton>
+                    <PrimaryButton onPress={confirmInputHandler}>시작하기</PrimaryButton>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <PrimaryButton>다시하기</PrimaryButton>
+                    <PrimaryButton onPress={resetInputHandler}>다시하기</PrimaryButton>
                 </View>
             </View>
         </View>
@@ -56,5 +87,9 @@ const styles = StyleSheet.create({
         flex: 1, // 버튼이 컨테이너 내에서 균등하게 공간을 차지하도록 설정        
     },
 });
+
+StartGameScreen.propTypes = {
+    onPickNumber: PropTypes.func.isRequired,
+};
 
 export default StartGameScreen;

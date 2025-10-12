@@ -1,15 +1,13 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import PropTypes from "prop-types";
 
-const PrimaryButton = ({ children }) => {
-    const pressHandler = () => {
-        console.log("Pressed!");
-    };
+const PrimaryButton = ({ children, onPress }) => {    
+    
 
     return (
         <View style={styles.buttonOuterContainer}>
             <Pressable
-                onPress={pressHandler}
+                onPress={onPress}
                 style={({ pressed }) =>
                     pressed
                         ? [styles.buttonInnerContainer, styles.pressed]
@@ -25,6 +23,7 @@ const PrimaryButton = ({ children }) => {
 
 PrimaryButton.propTypes = {
     children: PropTypes.node.isRequired,
+    onPress: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
