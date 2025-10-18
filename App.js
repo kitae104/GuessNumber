@@ -9,6 +9,7 @@ import Colors from "./constants/colors";
 import GameOverScreen from "./screens/GameOverScreen";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 // 스플래시 스크린이 자동으로 사라지지 않도록 설정
 SplashScreen.preventAutoHideAsync();
@@ -35,7 +36,8 @@ export default function App() {
             try {
                 // 여기에 폰트 로딩 외 다른 비동기 작업(e.g., API 호출, 자산 로딩)을 넣습니다.
                 // 예시: await Font.loadAsync(...) // useFonts 훅을 안 쓸 경우
-
+                // 회전 허용: 모든 방향 기본값으로 설정
+                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT);
                 // 인위적으로 1초 지연 (테스트용)
                 await new Promise((resolve) => setTimeout(resolve, 1000));
             } catch (e) {
@@ -48,6 +50,8 @@ export default function App() {
 
         prepare();
     }, []); // 앱 실행 시 1회만 실행
+
+
 
     // 4. 앱이 준비되었고, 폰트도 로딩되었는지 확인(useCallback은 불필요한 리렌더링 방지)
     const onLayoutRootView = useCallback(async () => {

@@ -1,6 +1,13 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import {
+    KeyboardAvoidingView,
+    ScrollView,
+    StyleSheet,
+    TextInput,
+    useWindowDimensions,
+    View,
+} from "react-native";
 import Toast from "react-native-toast-message";
 import Card from "../components/ui/Card";
 import InstructionText from "../components/ui/InstructionText";
@@ -10,14 +17,19 @@ import Colors from "../constants/colors";
 
 const StartGameScreen = ({ onPickNumber }) => {
     const [enteredNumber, setEnteredNumber] = useState("");
+    const { width, height } = useWindowDimensions(); // 화면 크기 정보 가져오기
 
     const numberInputHandler = (enteredText) => {
         setEnteredNumber(enteredText);
     };
 
     const confirmInputHandler = () => {
-        const chosenNumber = parseInt(enteredNumber); // 문자열을 정수로 변환
-        if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+        const chosenNumber = Number.parseInt(enteredNumber); // 문자열을 정수로 변환
+        if (
+            Number.isNaN(chosenNumber) ||
+            chosenNumber <= 0 ||
+            chosenNumber >= 99
+        ) {
             Toast.show({
                 type: "error",
                 text1: "유효하지 않은 숫자",
@@ -33,42 +45,56 @@ const StartGameScreen = ({ onPickNumber }) => {
         setEnteredNumber(""); // 입력 필드를 초기화
     };
 
+    const marginTopDistance = height < 420 ? 30 : 100;
+
     return (
-        <View style={styles.rootContainer}> 
-            <Title>숫자 맞추기 게임</Title>
-            <Card>
-                <InstructionText>1에서 99 사이의 숫자를 입력하세요:</InstructionText>
-                <TextInput
-                    style={styles.numberInput}
-                    value={enteredNumber}
-                    onChangeText={numberInputHandler}
-                    maxLength={2}
-                    keyboardType="number-pad"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                />
-                <View style={styles.buttonsContainer}>
-                    <View style={styles.buttonContainer}>
-                        <PrimaryButton onPress={confirmInputHandler}>
-                            시작하기
-                        </PrimaryButton>
-                    </View>
-                    <View style={styles.buttonContainer}>
-                        <PrimaryButton onPress={resetInputHandler}>
-                            다시하기
-                        </PrimaryButton>
-                    </View>
+        <ScrollView style={styles.screen}>
+            <KeyboardAvoidingView style={styles.screen} behavior="position">
+                <View
+                    style={[
+                        styles.rootContainer,
+                        { marginTop: marginTopDistance },
+                    ]}
+                >
+                    <Title>숫자 맞추기 게임</Title>
+                    <Card>
+                        <InstructionText>
+                            1에서 99 사이의 숫자를 입력하세요:
+                        </InstructionText>
+                        <TextInput
+                            style={styles.numberInput}
+                            value={enteredNumber}
+                            onChangeText={numberInputHandler}
+                            maxLength={2}
+                            keyboardType="number-pad"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                        />
+                        <View style={styles.buttonsContainer}>
+                            <View style={styles.buttonContainer}>
+                                <PrimaryButton onPress={confirmInputHandler}>
+                                    시작하기
+                                </PrimaryButton>
+                            </View>
+                            <View style={styles.buttonContainer}>
+                                <PrimaryButton onPress={resetInputHandler}>
+                                    다시하기
+                                </PrimaryButton>
+                            </View>
+                        </View>
+                    </Card>
                 </View>
-            </Card>
-        </View>
+            </KeyboardAvoidingView>
+        </ScrollView>
     );
 };
+
+//const deviceHeight =  Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
     rootContainer: {
         flex: 1,
-        marginTop: 100,
-        alignItems: 'center',
+        alignItems: "center",
     },
     inputContainer: {
         justifyContent: "center",
@@ -84,7 +110,7 @@ const styles = StyleSheet.create({
         shadowRadius: 6, // iOS용 그림자 반경
         shadowOpacity: 0.25, // iOS용 그림자 투명도
     },
-    
+
     numberInput: {
         height: 60, // 입력 필드의 높이 (픽셀 단위)
         width: 50, // 입력 필드의 너비 (픽셀 단위)

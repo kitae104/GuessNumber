@@ -1,14 +1,20 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+    FlatList,
+    StyleSheet,
+    Text,
+    useWindowDimensions,
+    View,
+} from "react-native";
 import Toast from "react-native-toast-message";
 import NumberContainer from "../components/game/NumberContainer";
 import Card from "../components/ui/Card";
 import InstructionText from "../components/ui/InstructionText";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Title from "../components/ui/Title";
-import GuessLogItem from '../components/game/GuessLogItem';
+import GuessLogItem from "../components/game/GuessLogItem";
 
 function generateRandomBetween(min, max, exclude) {
     const rndNum = Math.floor(Math.random() * (max - min)) + min; // max은 제외, min은 포함
@@ -27,6 +33,7 @@ const GameScreen = ({ userNumber, onGameOver }) => {
     const initialGuess = generateRandomBetween(1, 100, userNumber); // 1~99 사이의 랜덤 숫자 생성 (userNumber은 제외)
     const [currentGuess, setCurrentGuess] = useState(initialGuess); // 현재 추측 숫자 상태
     const [guessRounds, setGuessRounds] = useState([initialGuess]); // 추측한 숫자들의 배열 상태
+    const { width, height } = useWindowDimensions();
 
     useEffect(() => {
         if (currentGuess === userNumber) {
@@ -57,47 +64,82 @@ const GameScreen = ({ userNumber, onGameOver }) => {
         } else {
             minBoundary = currentGuess + 1; // 현재 추측 숫자 + 1을 새로운 최소값으로 설정
         }
-        console.log(minBoundary, maxBoundary);
+        
         const newRandomNumber = generateRandomBetween(
             minBoundary,
             maxBoundary,
             currentGuess
         );
         setCurrentGuess(newRandomNumber);
-        setGuessRounds((prevGuessRounds) => [newRandomNumber, ...prevGuessRounds]);
+        setGuessRounds((prevGuessRounds) => [
+            newRandomNumber,
+            ...prevGuessRounds,
+        ]);
     };
 
     const guessRoundsLength = guessRounds.length;
 
-    return (
-        <View style={styles.screen}>
-            <Title>상대방의 추측</Title>
+    let content = (
+        <>
             <NumberContainer>{currentGuess}</NumberContainer>
             <Card>
                 <InstructionText style={styles.instructionText}>
-                    더 큰 수 혹은 더 작은 수?
+                    Higher or lower?
                 </InstructionText>
                 <View style={styles.buttonsContainer}>
                     <View style={styles.buttonContainer}>
                         <PrimaryButton
-                            onPress={nextGuessHandler.bind(this, "higher")}
+                            onPress={nextGuessHandler.bind(this, "lower")}
                         >
-                            <Ionicons name="add-outline" size={24} color="white" />
+                            <Ionicons name="remove" size={24} color="white" />
                         </PrimaryButton>
                     </View>
                     <View style={styles.buttonContainer}>
                         <PrimaryButton
-                            onPress={nextGuessHandler.bind(this, "lower")}
+                            onPress={nextGuessHandler.bind(this, "greater")}
                         >
-                            <Ionicons name="remove-outline" size={24} color="white" />
+                            <Ionicons name="add" size={24} color="white" />
                         </PrimaryButton>
                     </View>
                 </View>
             </Card>
+        </>
+    );
+
+    if (width > 500) {
+        content = (
+            <View style={styles.buttonsContainerWide}>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton
+                        onPress={nextGuessHandler.bind(this, "lower")}
+                    >
+                        <Ionicons name="remove" size={24} color="white" />
+                    </PrimaryButton>
+                </View>
+                <NumberContainer>{currentGuess}</NumberContainer>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton
+                        onPress={nextGuessHandler.bind(this, "greater")}
+                    >
+                        <Ionicons name="add" size={24} color="white" />
+                    </PrimaryButton>
+                </View>
+            </View>
+        );
+    }
+    return (
+        <View style={styles.screen}>
+            <Title>상대방의 추측</Title>
+            {content}
             <View style={styles.listContainer}>
-                <FlatList 
+                <FlatList
                     data={guessRounds}
-                    renderItem={(itemData) => <GuessLogItem roundNumber={guessRoundsLength - itemData.index} guess={itemData.item} />}
+                    renderItem={(itemData) => (
+                        <GuessLogItem
+                            roundNumber={guessRoundsLength - itemData.index}
+                            guess={itemData.item}
+                        />
+                    )}
                     keyExtractor={(item) => item.toString()}
                 />
             </View>
@@ -114,12 +156,10 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         padding: 24,
+        alignItems: "center",
     },
     instructionText: {
-        marginBottom: 12,
-        fontSize: 16,
-        color: "#f9f8f5",
-        textAlign: "center",
+        marginBottom: 12,        
     },
     buttonsContainer: {
         flexDirection: "row",
@@ -127,10 +167,15 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flex: 1,
     },
+    buttonsContainerWide: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
     listContainer: {
         flex: 1,
         padding: 16,
-    }
+    },
 });
 
 export default GameScreen;

@@ -18,8 +18,9 @@ const styles = StyleSheet.create({
         textAlign: "center",
         borderWidth: 2,
         borderColor: "#f9f8f6",
-        padding: 12,
-        marginBottom: 24,
+        padding: 12,        
+        maxWidth: "80%",
+        width: 300,
     }
 });
 

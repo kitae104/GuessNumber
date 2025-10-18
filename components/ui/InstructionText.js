@@ -9,6 +9,13 @@ const InstructionText = ({ children, style }) => {
         </Text>
     );
 };
+
+
+InstructionText.propTypes = {
+    children: PropTypes.node.isRequired,
+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+};
+
 const styles = StyleSheet.create({
     instructionText: {
         fontFamily: "noto-sans", // 커스텀 폰트 적용
@@ -16,10 +23,5 @@ const styles = StyleSheet.create({
         fontSize: 18, // 텍스트 크기
     },
 });
-
-InstructionText.propTypes = {
-    children: PropTypes.node.isRequired,
-    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-};
 
 export default InstructionText;
