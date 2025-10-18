@@ -1,17 +1,23 @@
 import { StyleSheet, Text } from "react-native";
+import PropTypes from "prop-types";
 
 const Title = ({ children }) => {
     return <Text style={styles.title}>{children}</Text>;
 };
 
+Title.propTypes = {
+    children: PropTypes.node.isRequired,
+};
+
 const styles = StyleSheet.create({
     title: {
+        fontFamily: "noto-sans-bold",
         fontSize: 24,
         fontWeight: "bold",
-        color: "#ddb52f",
+        color: "#f9f8f5",
         textAlign: "center",
         borderWidth: 2,
-        borderColor: "#ddb52f",
+        borderColor: "#f9f8f6",
         padding: 12,
         marginBottom: 24,
     }

@@ -12,6 +12,7 @@
 - npx expo install babel-preset-expo
 - npx expo install prop-types
 - npx expo install expo-linear-gradient
+- npx expo install expo-font
 
 ### 파일 만들기 
 - rafce : React Arrow Function Component Export (방식 사용)

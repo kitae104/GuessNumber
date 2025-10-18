@@ -1,8 +1,11 @@
-import { StyleSheet, TextInput, View } from "react-native";
-import PrimaryButton from "../components/ui/PrimaryButton";
-import { useState } from "react";
-import Toast from "react-native-toast-message";
 import PropTypes from "prop-types";
+import { useState } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
+import Toast from "react-native-toast-message";
+import Card from "../components/ui/Card";
+import InstructionText from "../components/ui/InstructionText";
+import PrimaryButton from "../components/ui/PrimaryButton";
+import Title from "../components/ui/Title";
 import Colors from "../constants/colors";
 
 const StartGameScreen = ({ onPickNumber }) => {
@@ -31,38 +34,47 @@ const StartGameScreen = ({ onPickNumber }) => {
     };
 
     return (
-        <View style={styles.inputContainer}>
-            <TextInput
-                style={styles.numberInput}
-                value={enteredNumber}
-                onChangeText={numberInputHandler}
-                maxLength={2}
-                keyboardType="number-pad"
-                autoCapitalize="none"
-                autoCorrect={false}
-            />
-            <View style={styles.buttonsContainer}>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton onPress={confirmInputHandler}>
-                        시작하기
-                    </PrimaryButton>
+        <View style={styles.rootContainer}> 
+            <Title>숫자 맞추기 게임</Title>
+            <Card>
+                <InstructionText>1에서 99 사이의 숫자를 입력하세요:</InstructionText>
+                <TextInput
+                    style={styles.numberInput}
+                    value={enteredNumber}
+                    onChangeText={numberInputHandler}
+                    maxLength={2}
+                    keyboardType="number-pad"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                />
+                <View style={styles.buttonsContainer}>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={confirmInputHandler}>
+                            시작하기
+                        </PrimaryButton>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={resetInputHandler}>
+                            다시하기
+                        </PrimaryButton>
+                    </View>
                 </View>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton onPress={resetInputHandler}>
-                        다시하기
-                    </PrimaryButton>
-                </View>
-            </View>
+            </Card>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    rootContainer: {
+        flex: 1,
+        marginTop: 100,
+        alignItems: 'center',
+    },
     inputContainer: {
         justifyContent: "center",
         alignItems: "center",
         padding: 16, // 내부 여백
-        marginTop: 100, // 상단 여백 (화면 위쪽에서의 간격)
+        marginTop: 20, // 상단 여백 (화면 위쪽에서의 간격)
         marginHorizontal: 24, // 좌우 여백
         backgroundColor: Colors.primary800, // 컨테이너 배경색
         borderRadius: 8, // 모서리 둥글게
@@ -72,6 +84,7 @@ const styles = StyleSheet.create({
         shadowRadius: 6, // iOS용 그림자 반경
         shadowOpacity: 0.25, // iOS용 그림자 투명도
     },
+    
     numberInput: {
         height: 60, // 입력 필드의 높이 (픽셀 단위)
         width: 50, // 입력 필드의 너비 (픽셀 단위)

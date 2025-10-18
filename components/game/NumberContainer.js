@@ -21,9 +21,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     numberText: {
+        fontFamily: "noto-sans-bold",
         color: Colors.accent500,
-        fontSize: 36,
-        fontWeight: "bold",
+        fontSize: 36,        
     },
 });
 export default NumberContainer;
